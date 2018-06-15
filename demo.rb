@@ -9,7 +9,8 @@ def random_string(length=10)
 end
 
 # Este cliente puede ser creado una sola vez y luego ser reutilizado para la solicitud de varios archivos PFX.
-cliente_ejbca = Blobfish::Ejbca::Client.new('https://ejbca.demo.blobfish.pe:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'superadmin_llama.cer', 'superadmin_llama.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
+# El argumento 'ca-certificates.crt' solo es requerido en este caso debido a que nos estamos conectando a un WS de EJBCA que utiliza un certificado SSL sin reconocimiento comercial, de lo contrario podría ser 'nil'.
+cliente_ejbca = Blobfish::Ejbca::Client.new('https://192.168.2.3:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'ca-certificates.crt', 'superadmin_llama.cer', 'superadmin_llama.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
 
 # Nótese que el nombre de usuario en el EJBCA será construido a partir del RUC y el DNI.
 ruc = '20202020201'
