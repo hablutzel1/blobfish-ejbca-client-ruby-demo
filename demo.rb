@@ -9,7 +9,7 @@ def random_string(length=10)
 end
 
 # This client could be created only once and then be reused for requesting several PFX files.
-ejbca_client = Blobfish::Ejbca::Client.new('https://192.168.2.3:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'ca-certificates.crt', 'superadmin_llama.cer', 'superadmin_llama.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
+ejbca_client = Blobfish::Ejbca::Client.new('https://ejbca.demo.blobfish.pe:8443/ejbca/ejbcaws/ejbcaws?wsdl', nil, 'client.cer', 'client.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
 
 # Note that EJBCA's username will be constructed from the tax number and NID.
 tax_number = '20202020201'
