@@ -1,7 +1,7 @@
 # Blobfish::Ejbca demo
 
-## Notas
+## Notes
 
-### Credenciales de autenticación ante el EJBCA
+### EJBCA authentication credentials
 
-El proyecto de demostración actual incluye las credenciales de un usuario con rol de superadministrador (`superadmin_llama.cer` y `superadmin_llama.key`), sin embargo, en un entorno de producción real se deberá configurar y utilizar credenciales tan restringidas como sea posible para un cliente de este tipo, **¡no se deberían usar las credenciales de un administrador!**.
+Current demonstration project includes credentials for an user with superadministrator role (`superadmin_llama.cer` y `superadmin_llama.key`), but in a production environment, credentials for a client of this type should be restricted as much as possible, **credentials for an administrator should not be used!**.

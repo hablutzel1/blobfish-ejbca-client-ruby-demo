@@ -1,6 +1,6 @@
 require 'blobfish/ejbca'
 
-# Copiado de https://stackoverflow.com/a/1117003/320594.
+# Copied from https://stackoverflow.com/a/1117003/320594.
 def random_string(length=10)
   chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
   password = ''
@@ -8,22 +8,21 @@ def random_string(length=10)
   password
 end
 
-# Este cliente puede ser creado una sola vez y luego ser reutilizado para la solicitud de varios archivos PFX.
-# El argumento 'ca-certificates.crt' solo es requerido en este caso debido a que nos estamos conectando a un WS de EJBCA que utiliza un certificado SSL sin reconocimiento comercial, de lo contrario podría ser 'nil'.
-cliente_ejbca = Blobfish::Ejbca::Client.new('https://192.168.2.3:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'ca-certificates.crt', 'superadmin_llama.cer', 'superadmin_llama.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
+# This client could be created only once and then be reused for requesting several PFX files.
+ejbca_client = Blobfish::Ejbca::Client.new('https://192.168.2.3:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'ca-certificates.crt', 'superadmin_llama.cer', 'superadmin_llama.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
 
-# Nótese que el nombre de usuario en el EJBCA será construido a partir del RUC y el DNI.
-ruc = '20202020201'
-razon_social = 'CONTOSO S.A.'
-dni = '20202020'
-apellidos = 'PEREZ VARGAS'
-nombres = 'JUAN CARLOS'
-correo_electronico = 'jdoe@example.org'
-departamento = 'Lima'
-contrasena_aleatoria_para_pfx = random_string(8)
+# Note that EJBCA's username will be constructed from the tax number and NID.
+tax_number = '20202020201'
+organization_name = 'CONTOSO S.A.'
+nid = '20202020'
+last_name = 'PEREZ VARGAS'
+name = 'JUAN CARLOS'
+email = 'jdoe@example.org'
+locality = 'Lima'
+pfx_random_password = random_string(8)
 
-puts 'Solicitando generación de PFX del lado del EJBCA con la siguiente contraseña aleatoria ' + contrasena_aleatoria_para_pfx
-pfx_en_bytes = cliente_ejbca.request_pfx(ruc, razon_social, dni, apellidos, nombres, correo_electronico, departamento, contrasena_aleatoria_para_pfx)
-ruta_pfx = ruc + '_' + dni + '.pfx'
-File.binwrite(ruta_pfx, pfx_en_bytes)
-puts 'El PFX fue guardado correctamente en ' + ruta_pfx
+puts 'Requesting EJBCA side PFX generation with the following random password ' + pfx_random_password
+pfx_bytes = ejbca_client.request_pfx(tax_number, organization_name, nid, last_name, name, email, locality, pfx_random_password)
+pfx_path = tax_number + '_' + nid + '.pfx'
+File.binwrite(pfx_path, pfx_bytes)
+puts 'PFX successfully saved in ' + pfx_path
