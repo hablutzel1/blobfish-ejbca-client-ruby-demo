@@ -27,11 +27,12 @@ ejbca_client = Blobfish::Ejbca::Client.new('https://ejbca.demo.blobfish.pe:8443/
 ejbca_username = "llama_#{tax_number}_#{nid}"
 subject_dn = "CN=#{given_name} #{surname},emailAddress=#{email_address},serialNumber=#{nid},O=#{company_name},OU=#{tax_number},L=#{locality},street=#{street_address},C=PE"
 subject_alt_name = "rfc822name=#{email_address}"
+pfx_friendly_name = tax_number + '_' + nid
 
 request_cert = lambda { |validity_days|
   pfx_random_password = random_string(8)
   puts "Requesting EJBCA side PFX generation with the following random password #{pfx_random_password} (validity: #{validity_days} days)..."
-  resp = ejbca_client.request_pfx(ejbca_username, email_address, subject_dn, subject_alt_name, validity_days, pfx_random_password)
+  resp = ejbca_client.request_pfx(ejbca_username, email_address, subject_dn, subject_alt_name, validity_days, pfx_random_password, pfx_friendly_name)
 
   cert = resp[:cert]
   puts 'Certificate generated successfully:'
