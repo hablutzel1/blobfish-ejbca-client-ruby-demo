@@ -8,6 +8,8 @@ def random_string(length=10)
   length.times { password << chars[rand(chars.size)] }
   password
 end
+# Importing method with a shorter name.
+e = Blobfish::Ejbca::Client.method(:escape_dn_attr_value)
 
 # End entity data.
 tax_number = '20202020201'
@@ -16,7 +18,7 @@ nid = '20202020'
 surname = 'PEREZ VARGAS'
 given_name = 'JUAN CARLOS'
 email_address = 'jdoe@example.org'
-street_address = 'Av. Los Corales 123'
+street_address = 'Av. Los Corales 123, San Isidro'
 locality = 'Lima'
 
 # This client could be created only once and then be reused for requesting several PFX files.
@@ -25,7 +27,7 @@ ejbca_client = Blobfish::Ejbca::Client.new('https://ejbca.demo.blobfish.pe:8443/
 # Preparing data to be sent to EJBCA.
 # NOTE that 'ejbca_username' can be anything unique, but a human readable pattern is recommended to keep it easy to inspect EJBCA records.
 ejbca_username = "llama_#{tax_number}_#{nid}"
-subject_dn = "CN=#{given_name} #{surname},emailAddress=#{email_address},serialNumber=#{nid},O=#{company_name},OU=#{tax_number},L=#{locality},street=#{street_address},C=PE"
+subject_dn = "CN=#{e[given_name]} #{e[surname]},emailAddress=#{e[email_address]},serialNumber=#{e[nid]},O=#{e[company_name]},OU=#{e[tax_number]},L=#{e[locality]},street=#{e[street_address]},C=PE"
 subject_alt_name = "rfc822name=#{email_address}"
 pfx_friendly_name = tax_number + '_' + nid
 
