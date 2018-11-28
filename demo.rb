@@ -31,10 +31,10 @@ subject_dn = "CN=#{e[given_name]} #{e[surname]},emailAddress=#{e[email_address]}
 subject_alt_name = "rfc822name=#{email_address}"
 pfx_friendly_name = tax_number + '_' + nid
 
-request_cert = lambda { |validity_days|
+request_cert = lambda { |validity_type, validity_value|
   pfx_random_password = random_string(8)
-  puts "Requesting EJBCA side PFX generation with the following random password #{pfx_random_password} (validity: #{validity_days} days)..."
-  resp = ejbca_client.request_pfx(ejbca_username, email_address, subject_dn, subject_alt_name, validity_days, pfx_random_password, pfx_friendly_name)
+  puts "Requesting EJBCA side PFX generation with the following random password #{pfx_random_password} (Validity: #{validity_type} #{validity_value})..."
+  resp = ejbca_client.request_pfx(ejbca_username, email_address, subject_dn, subject_alt_name, validity_type, validity_value, pfx_random_password, pfx_friendly_name)
 
   cert = resp[:cert]
   puts 'Certificate generated successfully:'
@@ -43,7 +43,7 @@ request_cert = lambda { |validity_days|
   puts "  - Valid from: #{cert.not_before}"
   puts "  - Valid to: #{cert.not_after}"
 
-  pfx_path = "#{tax_number}_#{nid}_#{validity_days}.pfx"
+  pfx_path = "#{tax_number}_#{nid}_#{validity_type}_#{validity_value.to_s.gsub(/[^\w.]/, '_')}.pfx"
   pfx_bytes = resp[:pfx]
   File.binwrite(pfx_path, pfx_bytes)
   puts "PFX successfully saved in #{pfx_path}"
@@ -53,9 +53,9 @@ request_cert = lambda { |validity_days|
   return cert
 }
 
-cert_1_year = request_cert[365]
-cert_2_years = request_cert[730]
-cert_3_years = request_cert[1095]
+cert_1_year = request_cert[:days_from_now, 365]
+cert_2_years = request_cert[:days_from_now, 730]
+cert_3_years = request_cert[:days_from_now, 1095]
 
 puts "Requesting revocation for certificate with serial number #{cert_2_years.serial_hex}..."
 ejbca_client.revoke_cert(cert_2_years.serial_hex)
@@ -73,3 +73,8 @@ all_certs.each do |cert|
     printf " revoked on #{revocation_status[:revocation_date]}\n"
   end
 end
+
+puts
+
+# Requesting reissue for the certificate previously revoked
+reissued_cert_2_years = request_cert[:fixed_not_after, cert_2_years.not_after]
