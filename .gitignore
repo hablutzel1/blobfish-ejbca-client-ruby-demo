@@ -1,2 +1,4 @@
 /*.pfx
+/*.cer
+!/client.cer
 /.idea
