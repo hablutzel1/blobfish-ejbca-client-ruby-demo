@@ -42,7 +42,7 @@ locality = 'Lima'
 
 # This client could be created only once and then be reused for requesting several PFX files.
 # TODO try make these arguments overridable to be able to modify them for alternative development environments.
-ejbca_client = Blobfish::Ejbca::Client.new('https://ejbca.demo.blobfish.pe:8443/ejbca/ejbcaws/ejbcaws?wsdl', nil, 'client.cer', 'client.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
+ejbca_client = Blobfish::Ejbca::Client.new('https://blobfish-25.blobfish.pe:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'BlobfishRootCAdemo.cacert.pem', 'client.cer', 'client.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
 
 # Preparing data to be sent to EJBCA.
 # NOTE that 'ejbca_username' can be anything unique, but a human readable pattern is recommended to keep it easy to inspect EJBCA records.
