@@ -1,4 +1,7 @@
+# Excludes PFXs generated during the demo execution.
 /*.pfx
+# Excludes CERs generated during the demo execution as well as client.cer.
 /*.cer
-!/client.cer
+/client.key
+/cacerts_localhost.pem
 /.idea

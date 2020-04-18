@@ -43,11 +43,11 @@ validated_by = 'Validated by XYZ'
 
 # This client could be created only once and then be reused for requesting several PFX files.
 # TODO try make these arguments overridable to be able to modify them for alternative development environments.
-ejbca_client = Blobfish::Ejbca::Client.new('https://blobfish-25.blobfish.pe:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'BlobfishRootCAdemo.cacert.pem', 'client.cer', 'client.key', 'secret', 'LlamaPeStandardCa',  'LlamaPePJEndUserNoApproval_CP', 'LlamaPePJEndUserNoNotification_EE')
+ejbca_client = Blobfish::Ejbca::Client.new('https://localhost:8443/ejbca/ejbcaws/ejbcaws?wsdl', 'cacerts_localhost.pem', 'client.cer', 'client.key', 'secret', 'MyCertificationAuthority',  'MyCertProfile', 'MyEndEntityProfile')
 
 # Preparing data to be sent to EJBCA.
 # NOTE that 'ejbca_username' can be anything unique, but a human readable pattern is recommended to keep it easy to inspect EJBCA records.
-ejbca_username = "llama_#{tax_number}_#{nid}"
+ejbca_username = "#{tax_number}_#{nid}"
 subject_dn = "CN=#{e[given_name]} #{e[surname]},emailAddress=#{e[email_address]},serialNumber=#{e[nid]},O=#{e[company_name]},OU=#{e[tax_number]},OU=#{e[validated_by]},T=#{e[title]},L=#{e[locality]},street=#{e[street_address]},C=PE"
 subject_alt_name = "rfc822name=#{email_address}"
 pfx_friendly_name = tax_number + '_' + nid
